@@ -7,6 +7,7 @@ using neXn.Lib.Playingcards.Models;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,8 @@ namespace ConsoleSolitaire
 {
     internal class Program
     {
+        internal static Stopwatch roundTimer = new();
+
         internal static Deck Talon = null;
 
         internal static TableuPile Pile1 = new();
@@ -92,6 +95,8 @@ namespace ConsoleSolitaire
         {
             Sound.Play(SND_LOADED);
 
+            TalonOpen.Clear();
+
             Talon = new();
             Talon.Create();
             Talon.Shuffle(3);
@@ -111,6 +116,8 @@ namespace ConsoleSolitaire
             }
 
             Log.Information("[NewRound] Piles filled");
+
+            roundTimer.Restart();
         }
 
         public static void RenderBuildingPiles()
@@ -165,6 +172,8 @@ namespace ConsoleSolitaire
 
         public static void RenderTalon()
         {
+            Console.WriteLine($"{new string(' ', Console.WindowWidth - 30)}{roundTimer.Elapsed:hh\\:mm\\:ss\\:ffffff}");
+
             if (!TalonOpen.Any() && Talon.Carddeck.Any())
             {
                 Console.ForegroundColor = ConsoleColor.White;
@@ -385,10 +394,17 @@ namespace ConsoleSolitaire
         {
             if (buildingPiles.All(x => x.IsFull))
             {
+                roundTimer.Stop();
                 Console.WriteLine("");
                 Console.WriteLine("");
                 Console.WriteLine("");
                 Console.WriteLine("You've won!");
+                Console.WriteLine("");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write($"Round time: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"{roundTimer.Elapsed:hh\\:mm\\:ss\\:ffffff}");
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.ReadKey();
                 NewRound();
             }
