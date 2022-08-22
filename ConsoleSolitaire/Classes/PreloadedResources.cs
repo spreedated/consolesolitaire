@@ -19,6 +19,9 @@ namespace ConsoleSolitaire.Classes
         public static string HIDDENPARTIALCARD = null;
         public static string PARTIALCARD = null;
         public static byte[] SND_LOADED = null;
+        public static byte[] SND_BEEP = null;
+        public static byte[] SND_LONGBEEP = null;
+        public static byte[] SND_DENY = null;
 
         internal readonly static Dictionary<string,string> resources = new()
                                                                         {
@@ -28,6 +31,9 @@ namespace ConsoleSolitaire.Classes
                                                                             {"HIDDENPARTIALCARD", "hiddenpartialcard.txt" },
                                                                             {"PARTIALCARD", "partialcard.txt" },
                                                                             {"SND_LOADED", "loaded.wav" },
+                                                                            {"SND_BEEP", "beep.wav" },
+                                                                            {"SND_LONGBEEP", "longbeep.wav" },
+                                                                            {"SND_DENY", "deny.wav" }
                                                                         };
 
         internal static event EventHandler PreloadCompleted;

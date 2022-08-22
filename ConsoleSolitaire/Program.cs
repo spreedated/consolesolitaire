@@ -90,28 +90,7 @@ namespace ConsoleSolitaire
 
         private static void StartNewRound()
         {
-            Task.Factory.StartNew(() =>
-            {
-                NAudio.Wave.WaveOutEvent w = new();
-                WaveFileReader ww = new(new MemoryStream(SND_LOADED));
-                System.Timers.Timer t = new(500d);
-                t.Elapsed += (s, e) => { t.Enabled = true; Log.Information(w.GetPositionTimeSpan().ToString("ss\\:ffffff")); };
-
-
-                w.Init(new WaveFileReader(new MemoryStream(SND_LOADED)));
-                w.Volume = 0.5f;
-                w.Play();
-
-                while (w.PlaybackState != PlaybackState.Stopped)
-                {
-                    if (!t.Enabled)
-                    {
-                        t.Start();
-                    }
-                }
-                t.Stop();
-                w.Dispose();
-            });
+            Sound.Play(SND_LOADED);
 
             Talon = new();
             Talon.Create();
@@ -261,6 +240,7 @@ namespace ConsoleSolitaire
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.ReadKey();
                 }
+                Sound.Play(SND_LONGBEEP);
             }
 
             if ((r.StartsWith("s") || r.StartsWith("save")) && r.Split(' ').Length <= 2)
@@ -282,6 +262,7 @@ namespace ConsoleSolitaire
                 }
                 if (response != null)
                 {
+                    Sound.Play(SND_LONGBEEP);
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.Write($"Game has been saved \"");
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -304,6 +285,7 @@ namespace ConsoleSolitaire
                 if (r == "y" || r == "Y")
                 {
                     NewRound();
+                    Sound.Play(SND_LONGBEEP);
                     return;
                 }
             }
@@ -317,11 +299,13 @@ namespace ConsoleSolitaire
                     {
                         buildingPiles.First(x => x.IsEmpty).PushCard(c);
                         piles[Convert.ToInt32(r.Substring(0, r.IndexOf(','))) - 1].PopCard();
+                        Sound.Play(SND_BEEP);
                     }
                     else if (buildingPiles.Any(x => x.PileSuit == c.Suit) && buildingPiles.First(x => x.PileSuit == c.Suit).Peek().Numbervalue + 1 == c.Numbervalue)
                     {
                         buildingPiles.First(x => x.PileSuit == c.Suit).PushCard(c);
                         piles[Convert.ToInt32(r.Substring(0, r.IndexOf(','))) - 1].PopCard();
+                        Sound.Play(SND_BEEP);
                     }
                 }
             }
@@ -329,6 +313,7 @@ namespace ConsoleSolitaire
             if (r.IndexOf(',') == 1 && !r.Contains('b') && !r.Contains('t') && !r.Contains('+') && !r.Contains('-'))
             {
                 MoveToAnotherPile(piles[Convert.ToInt32(r.Substring(0, r.IndexOf(','))) - 1], piles[Convert.ToInt32(r.Substring(r.IndexOf(',') + 1)) - 1]);
+                Sound.Play(SND_BEEP);
             }
 
             if (r == "a" && !Talon.Carddeck.Any() && !TalonOpen.Any() && piles.All(x => x.pile.All(y => !y.Hidden)))
@@ -370,6 +355,7 @@ namespace ConsoleSolitaire
                 Card c = TalonOpen.Pop();
                 c.Hidden = false;
                 piles[Convert.ToInt32(r.Substring(r.IndexOf(',') + 1)) - 1].PushCard(c);
+                Sound.Play(SND_BEEP);
             }
 
             if (r == "+,-")
@@ -377,12 +363,13 @@ namespace ConsoleSolitaire
                 if (TalonOpen.Peek().Value == "A")
                 {
                     buildingPiles.First(x => x.IsEmpty)?.PushCard(TalonOpen.Pop());
+                    Sound.Play(SND_BEEP);
                 }
                 else if (buildingPiles.Any(x => x.PileSuit == TalonOpen.Peek().Suit))
                 {
                     buildingPiles.First(x => x.PileSuit == TalonOpen.Peek().Suit).PushCard(TalonOpen.Pop());
+                    Sound.Play(SND_BEEP);
                 }
-
             }
 
             Console.Clear();

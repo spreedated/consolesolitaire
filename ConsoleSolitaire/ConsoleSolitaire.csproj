@@ -20,16 +20,22 @@
     <None Remove="hiddenfullcard.txt" />
     <None Remove="hiddenpartialcard.txt" />
     <None Remove="partialcard.txt" />
+    <None Remove="Resources\beep.wav" />
     <None Remove="Resources\blankcard.txt" />
+    <None Remove="Resources\deny.wav" />
     <None Remove="Resources\loaded.wav" />
+    <None Remove="Resources\longbeep.wav" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\beep.wav" />
     <EmbeddedResource Include="Resources\blankcard.txt" />
+    <EmbeddedResource Include="Resources\deny.wav" />
     <EmbeddedResource Include="Resources\fullcard.txt" />
     <EmbeddedResource Include="Resources\hiddenfullcard.txt" />
     <EmbeddedResource Include="Resources\hiddenpartialcard.txt" />
     <EmbeddedResource Include="Resources\loaded.wav" />
+    <EmbeddedResource Include="Resources\longbeep.wav" />
     <EmbeddedResource Include="Resources\partialcard.txt" />
   </ItemGroup>
 
